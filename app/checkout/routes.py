@@ -12,9 +12,9 @@ checkout_router = APIRouter(prefix="/checkout",
 
 #Mocks paymment and checkout the products in cart
 
-@checkout_router.post("/checkout", status_code=status.HTTP_201_CREATED)
-async def checkout(
+@checkout_router.post("/", status_code=status.HTTP_201_CREATED)
+def checkout(
     session: Session = Depends(get_session), 
     current_user: User = Depends(user_required)
     ):
-    return await perform_checkout(session, current_user)
+    return  perform_checkout(session, current_user)

@@ -8,7 +8,7 @@ from app.core.logger import get_logger
 logger = get_logger("orders")
 
 
-async def get_all_orders_for_user(session: Session, user_id: int) -> List[Order]:
+def get_all_orders_for_user(session: Session, user_id: int) -> List[Order]:
     try:
         orders = session.query(Order).filter(Order.user_id == user_id).all()
         logger.info(f"Fetched {len(orders)} orders for user_id={user_id}")
@@ -21,7 +21,7 @@ async def get_all_orders_for_user(session: Session, user_id: int) -> List[Order]
         )
 
 
-async def get_order_by_id(session: Session, order_id: int, user_id: int) -> Order:
+def get_order_by_id(session: Session, order_id: int, user_id: int) -> Order:
     try:
         order = session.query(Order).filter(Order.id == order_id, Order.user_id == user_id).first()
         if not order:

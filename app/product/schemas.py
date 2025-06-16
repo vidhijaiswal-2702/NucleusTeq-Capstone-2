@@ -11,7 +11,7 @@ class ProductCreate(BaseModel):
 
 class Product(ProductCreate):  # Inherit from ProductCreate
     id: int
-    created_by: int  
+    # created_by: int  
     class Config:
         from_attributes = True
         

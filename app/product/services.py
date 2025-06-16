@@ -11,7 +11,7 @@ from sqlalchemy.orm import Session
 logger = get_logger("product")
 
 
-async def create_product(db: Session, product: ProductCreate,current_user: User):
+def create_product(db: Session, product: ProductCreate,current_user: User):
     try:
         if not product.name:
             raise HTTPException(status_code=400,detail="Enter a valid product name")
@@ -23,11 +23,16 @@ async def create_product(db: Session, product: ProductCreate,current_user: User)
             raise HTTPException(status_code=400,detail="Enter a valid product category")
         if not product.image_url:
             raise HTTPException(status_code=400,detail="Enter an image url")
-        product_data = product.model_dump()
-        product_data["image_url"] = str(product_data["image_url"])  
-        db_product = Product(**product_data, created_by=current_user.id)
-
         
+        db_product = Product(
+            name = product.name,
+            description=product.description,
+            price=product.price,
+            stock=product.stock,
+            category=product.category,
+            image_url=str(product.image_url),
+            created_by=current_user.id
+        )
         db.add(db_product)
         db.commit()
         db.refresh(db_product)
@@ -66,6 +71,8 @@ def get_product_by_id(db: Session, product_id: int):
     except Exception as e:
         logger.error(f"Error getting product by ID: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail="Failed to get product")
+    
+   
 
 def update_product(db: Session, product_id: int, updated_data: ProductCreate,current_user: User):
     try:
@@ -78,16 +85,19 @@ def update_product(db: Session, product_id: int, updated_data: ProductCreate,cur
             logger.warning(f"Unauthorized product update attempt by user {current_user.email}")
             raise HTTPException(status_code=403, detail="You are not allowed to update this product.")
 
-        for key, value in updated_data.model_dump().items():
-            # Convert HttpUrl or other non-primitive types to string
-            if not isinstance(value, (str, int, float, bool, type(None))):
-                value = str(value)
-            setattr(product, key, value)
+        product.name = updated_data.name
+        product.description = updated_data.description
+        product.price = updated_data.price
+        product.stock = updated_data.stock
+        product.category = updated_data.category
+        product.image_url = str(updated_data.image_url) 
 
         db.commit()
         db.refresh(product)
+        
         logger.info(f"Product updated: ID {product_id}")
         return product
+    
     except HTTPException as http_exc:
         logger.warning(f"Validation error during product updation: {http_exc.detail}")
         raise http_exc  # Re-raise the specific HTTPException
@@ -95,6 +105,8 @@ def update_product(db: Session, product_id: int, updated_data: ProductCreate,cur
     except Exception as e:
         logger.error(f"Error updating product ID {product_id}: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail="Failed to update product")
+
+
 
 def delete_product(db: Session, product_id: int, current_user:User):
     try:
@@ -122,14 +134,14 @@ def delete_product(db: Session, product_id: int, current_user:User):
     
 #PUBLIC PRODUCT APIS
 
-async def list_products_service(
+def list_products_service(
     session: Session,
     category: Optional[str],
     min_price: Optional[float],
     max_price: Optional[float],
     sort_by: Optional[str],
-    page: int,
-    page_size: int
+    skip: int=0,
+    limit: int=10
 ) -> List[Product]:
     try:
         logger.debug("Listing products with filters")
@@ -151,13 +163,13 @@ async def list_products_service(
         elif sort_by == "name":
             query = query.order_by(Product.name.asc())
 
-        offset = (page - 1) * page_size
-        return query.offset(offset).limit(page_size).all()
+        products = query.offset(skip).limit(limit).all()
+        return products
     except Exception as e:
         logger.error(f"Error listing products: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail="Failed to list products")
 
-async def search_products_service(
+def search_products_service(
     session: Session,
     keyword: str
 ) -> List[Product]:

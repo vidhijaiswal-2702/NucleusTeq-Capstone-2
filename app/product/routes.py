@@ -8,16 +8,17 @@ from app.core.database import get_session
 from fastapi.responses import JSONResponse
 
 
-product_router = APIRouter(prefix="/products",
+product_router = APIRouter(prefix="/products",     #for product crud
     tags=["products"],
     responses={404: {"description": "Not found"}},)
 
-public_product_router = APIRouter(prefix="/public",
+public_product_router = APIRouter(prefix="/public",  #for public product apis
     tags=["public"],
     responses={404: {"description": "Not found"}},)
 
+
 @product_router.post("/create-products",status_code=status.HTTP_200_OK, response_model=schemas.Product)
-async def create_product(
+def create_product(
     product: schemas.ProductCreate,
     db: Session = Depends(get_session),
     current_user: User = Depends(admin_required),  # Restrict to admin users
@@ -25,7 +26,9 @@ async def create_product(
     """
     Create a new product (Admin only).
     """
-    return await services.create_product(db=db, product=product,current_user=current_user)
+    return  services.create_product(db=db, product=product,current_user=current_user)
+
+
 
 @product_router.get("/", response_model=list[schemas.Product])
 def get_products(
@@ -76,7 +79,7 @@ def delete_product(
 
    
 @public_product_router.get("/products", response_model=List[schemas.Product])
-async def list_products(
+def list_products(
     category: Optional[str] = None,
     min_price: Optional[float] = None,
     max_price: Optional[float] = None,
@@ -85,15 +88,15 @@ async def list_products(
     page_size: int = 10,
     session: Session = Depends(get_session)
 ):
-    return await services.list_products_service(session, category, min_price, max_price, sort_by, page, page_size)
+    return  services.list_products_service(session, category, min_price, max_price, sort_by, page, page_size)
 
 
 @public_product_router.get("/products/search", response_model=List[schemas.Product])
-async def search_products(
+def search_products(
     keyword: str,
     session: Session = Depends(get_session)
 ):
-    return await services.search_products_service(session, keyword)
+    return  services.search_products_service(session, keyword)
  
 
 

@@ -13,19 +13,19 @@ order_router = APIRouter(prefix="/orders", tags=["Orders"],
                          responses={404: {"description": "Not found"}},)
 
 @order_router.get("", response_model=List[OrderSummary])
-async def get_orders(
+def get_orders(
     session: Session = Depends(get_session), 
     current_user:User=Depends(user_required)
     ):
-    return await get_all_orders_for_user(session, current_user.id)
+    return  get_all_orders_for_user(session, current_user.id)
 
 @order_router.get("/{order_id}", response_model=OrderResponse)
-async def get_order_detail(
+def get_order_detail(
     order_id: int, 
     session: Session = Depends(get_session), 
     current_user:User=Depends(user_required)
     ):
-    order = await get_order_by_id(session, order_id, current_user.id)
+    order = get_order_by_id(session, order_id, current_user.id)
     if not order:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Order not found")
     return order

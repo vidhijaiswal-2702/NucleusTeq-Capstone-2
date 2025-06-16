@@ -9,7 +9,7 @@ from datetime import datetime
 
 logger = get_logger("checkout")
 
-async def perform_checkout(session: Session, current_user: User):
+def perform_checkout(session: Session, current_user: User):
     try:
         cart_items = session.query(Cart).filter(Cart.user_id == current_user.id).all()
 
