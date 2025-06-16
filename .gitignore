@@ -1,0 +1,9 @@
+.env
+app.db
+venv
+.venv
+.vscode
+logs
+__pycache__
+__init__.py
+alembic/versions
