@@ -73,7 +73,11 @@ def delete_product(
     product_id: int,
     db: Session = Depends(get_session),
     current_user: User = Depends(admin_required)
+    
 ):
+    """
+    Delete a product by ID (Admin only).
+    """
     services.delete_product(product_id=product_id, db=db, current_user=current_user)
     return JSONResponse(status_code=200, content={"message": "Product deleted successfully"})
 
@@ -88,6 +92,9 @@ def list_products(
     page_size: int = 10,
     session: Session = Depends(get_session)
 ):
+    """
+    list products based on category,min_price,max_price,sorting,pagination
+    """
     return  services.list_products_service(session, category, min_price, max_price, sort_by, page, page_size)
 
 
@@ -96,6 +103,9 @@ def search_products(
     keyword: str,
     session: Session = Depends(get_session)
 ):
+    """
+    list products based on keyword
+    """
     return  services.search_products_service(session, keyword)
  
 

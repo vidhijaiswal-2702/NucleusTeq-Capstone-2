@@ -41,9 +41,9 @@ def create_product(db: Session, product: ProductCreate,current_user: User):
     
     except HTTPException as http_exc:
         logger.warning(f"Validation error during product creation: {http_exc.detail}")
-        raise http_exc  # Re-raise the specific HTTPException
+        raise http_exc  # Re-raise excepion to catch custom validation errors
 
-    except Exception as e:
+    except Exception as e: #any unexcepted errors -> internal server error
         logger.error(f"Error creating product: {e}",exc_info=True)
         raise HTTPException(status_code=500, detail="Failed to create product")
         
@@ -100,7 +100,7 @@ def update_product(db: Session, product_id: int, updated_data: ProductCreate,cur
     
     except HTTPException as http_exc:
         logger.warning(f"Validation error during product updation: {http_exc.detail}")
-        raise http_exc  # Re-raise the specific HTTPException
+        raise http_exc   # Re-raise excepion to catch custom validation errors
 
     except Exception as e:
         logger.error(f"Error updating product ID {product_id}: {e}", exc_info=True)
@@ -125,7 +125,7 @@ def delete_product(db: Session, product_id: int, current_user:User):
         
     except HTTPException as http_exc:
         logger.warning(f"Validation error during product deletion: {http_exc.detail}")
-        raise http_exc  # Re-raise the specific HTTPException
+        raise http_exc  #  Re-raise excepion to catch custom validation errors
 
     except Exception as e:
         logger.error(f"Error deleting product: {e}", exc_info=True)
@@ -148,7 +148,7 @@ def list_products_service(
         query = session.query(Product)
 
         if category:
-            query = query.filter(Product.category.ilike(f"%{category}%"))
+            query = query.filter(Product.category.ilike(f"%{category}%")) #ilike means matches case insensative values
 
         if min_price is not None:
             query = query.filter(Product.price >= min_price)

@@ -30,7 +30,9 @@ def perform_checkout(session: Session, current_user: User):
             order_items.append(OrderItem(
                 product_id=item.product_id,
                 quantity=item.quantity,
-                price_at_purchase=item.product.price
+                price_at_purchase=item.product.price,
+                product_name=item.product.name,
+                product_description=item.product.description
             ))
 
         order = Order(

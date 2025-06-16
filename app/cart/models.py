@@ -12,4 +12,4 @@ class Cart(Base):
     __table_args__ = (UniqueConstraint('user_id', 'product_id', name='_user_product_uc'),)
 
     user = relationship("User", back_populates="cart_items")
-    product = relationship("Product")
+    product = relationship("Product",back_populates="cart_entries")

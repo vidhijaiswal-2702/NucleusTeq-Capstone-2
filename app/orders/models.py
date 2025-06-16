@@ -1,5 +1,6 @@
 from datetime import datetime
-from sqlalchemy import Column, Integer, Float, Enum, ForeignKey, DateTime
+
+from sqlalchemy import Column, Integer, Float, Enum, ForeignKey, DateTime,String
 from sqlalchemy.orm import relationship
 from app.core.database import Base
 import enum
@@ -30,6 +31,9 @@ class OrderItem(Base):
 
     quantity = Column(Integer, nullable=False)
     price_at_purchase = Column(Float, nullable=False)
+    
+    product_name = Column(String, nullable=True)
+    product_description = Column(String, nullable=True)
 
     order = relationship("Order", back_populates="items")
     product = relationship("Product", back_populates="order_items",passive_deletes=True)
