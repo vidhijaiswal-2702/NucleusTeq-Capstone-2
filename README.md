@@ -23,21 +23,7 @@ A complete E-Commerce RESTful API backend built with **FastAPI**, **SQLAlchemy**
 
 ## 🗂️ Project Structure
 
-app/
-│
-├── auth/ # Login, Signup, Password Reset, JWT tokens
-├── users/ # User CRUD, role enforcement
-├── products/ # Product CRUD and public listing
-├── cart/ # Add, remove, update, view cart
-├── orders/ # Place and view orders
-├── checkout/ # Dummy payment + cart to order
-├── email/ # Mail sending via Mailpit and Gmail
-├── core/ # Config, logging, database setup
-├── models/ # SQLAlchemy models
-├── schemas/ # Pydantic schemas
-├── utils/ # Token & helper functions
-└── main.py # FastAPI app startup
-
+<pre lang="markdown"> ```bash app/ │ ├── auth/ # Login, Signup, Password Reset, JWT tokens ├── users/ # User CRUD, role enforcement ├── products/ # Product CRUD and public listing ├── cart/ # Add, remove, update, view cart ├── orders/ # Place and view orders ├── checkout/ # Dummy payment + cart to order ├── email/ # Mail sending via Mailpit and Gmail ├── core/ # Config, logging, database setup ├── models/ # SQLAlchemy models ├── schemas/ # Pydantic schemas ├── utils/ # Token & helper functions └── main.py # FastAPI app startup ``` </pre>
 
 
 ---
