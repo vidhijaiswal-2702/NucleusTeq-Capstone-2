@@ -20,11 +20,48 @@ A complete E-Commerce RESTful API backend built with **FastAPI**, **SQLAlchemy**
 - ✅ Modular Folder Structure with Dependency Injection
 
 ---
+## 📁 Folder Structure
 
-## 🗂️ Project Structure
+```bash
+ecommerce-backend/
+├── alembic/
+│   └── versions/
+├── app/
+│   ├── auth/         # Login, Signup, Password Reset, JWT tokens
+│   ├── users/        # User CRUD, role enforcement
+│   ├── products/     # Product CRUD and public listing
+│   ├── cart/         # Add, remove, update, view cart
+│   ├── orders/       # Place and view orders
+│   ├── checkout/     # Dummy payment + cart to order
+│   ├── email/        # Mail sending via Mailpit and Gmail
+│   ├── core/         # Config, logging, database setup
+│   ├── models/       # SQLAlchemy models
+│   ├── schemas/      # Pydantic schemas
+│   ├── utils/        # Token & helper functions
+│   └── main.py       # FastAPI app startup
+├── seed_products.py
+├── requirements.txt
+├── .env
+├── alembic.ini
+└── README.md
 
-<pre lang="markdown"> ```bash app/ │ ├── auth/ # Login, Signup, Password Reset, JWT tokens ├── users/ # User CRUD, role enforcement ├── products/ # Product CRUD and public listing ├── cart/ # Add, remove, update, view cart ├── orders/ # Place and view orders ├── checkout/ # Dummy payment + cart to order ├── email/ # Mail sending via Mailpit and Gmail ├── core/ # Config, logging, database setup ├── models/ # SQLAlchemy models ├── schemas/ # Pydantic schemas ├── utils/ # Token & helper functions └── main.py # FastAPI app startup ``` </pre>
+```
 
+---
+
+## ⚙️ Tech Stack
+
+| Category             | Tool / Library              |
+|----------------------|-----------------------------|
+| Backend Framework    | FastAPI                     |
+| ORM & DB             | SQLAlchemy + PostgreSQL     |
+| Authentication       | JWT                         |
+| Password Hashing     | bcrypt                      |
+| Validation           | Pydantic                    |
+| Migrations           | Alembic                     |
+| Web Server           | Uvicorn                     |
+| Logging              | Python Logging Module       |
+| Email                | Gmail SMTP + Mailpit        |
 
 ---
 
@@ -90,14 +127,25 @@ Supports both:
 ```bash
 git clone https://github.com/your-username/ecommerce-backend.git
 cd ecommerce-backend
+
+```
+### 2. Create Virtual Environment
+```bash
+python -m venv venv
+# Windows
+venv\Scripts\activate
+# macOS/Linux
+source venv/bin/activate
+
+
 ```
 
-### 2. Install Dependencies
+### 3. Install Dependencies
 ```bash
 pip install -r requirements.txt
 ```
 
-### 3. Set environment variables
+### 4. Set environment variables
 ```bash
 DATABASE_URL=sqlite:///./db.sqlite3
 SECRET_KEY=your-secret
@@ -106,12 +154,12 @@ MAIL_USERNAME=your@gmail.com
 MAIL_PASSWORD=your-app-password
 ```
 
-### 4. Run Alembic migrations
+### 5. Run Alembic migrations
 ```bash
 alembic upgrade head
 ```
 
-### 5. Start the app
+### 6. Start the app
 ```bash
 uvicorn app.main:app --reload
 ```
@@ -129,5 +177,50 @@ Input validation via Pydantic
 Structured error logging
 
 SQL injection prevention via SQLAlchemy ORM
+
 ---
 
+## 📘 API Documentation
+
+- Swagger UI: `http://localhost:8000/docs`
+
+## 🧾 Database Tables
+
+| Table Name              | Description                                |
+| ----------------------- | ------------------------------------------ |
+| users                   | Stores user info, roles, hashed passwords  |
+| products                | Admin-managed product listings             |
+| cart\_items             | User-specific cart item records            |
+| orders                  | Orders placed by users                     |
+| order\_items            | Items associated with each order           |
+| password\_reset\_tokens | One-time secure tokens for password resets |
+| user\_tokens            |Access & refresh tokens with expiration date|
+
+
+---
+
+## ✅ Manual Testing Checklist
+
+ Signup, login, logout functionality
+
+ Forgot password + reset password flow
+
+ Admin: create, update, delete products
+
+ Public: browse & search products
+
+ Cart: add, update, remove items
+
+ Checkout: place orders
+
+ Orders: view history and order details
+
+---
+
+## 🙋 Author
+Vidhi Jaiswal
+B.Tech CSE
+GitHub: @vidhijaiswal-2702
+Email: vidhijais123@gmail.com
+
+---
